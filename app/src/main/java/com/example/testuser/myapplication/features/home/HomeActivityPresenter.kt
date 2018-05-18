@@ -21,13 +21,16 @@ class HomeActivityPresenter : Presenter<HomeActivityPresenter.View>() {
 
         postsObservable.subscribe(object : Observer<List<Post>> {
             override fun onNext(postList: List<Post>?) {
+                view.displayLoading(true)
                 view.displayPost(postList)
             }
 
-            override fun onCompleted() {}
+            override fun onCompleted() {
+                view.displayLoading(false)
+            }
 
             override fun onError(e: Throwable) {
-
+                 view.displayError(e.message)
             }
 
         })
@@ -39,7 +42,9 @@ class HomeActivityPresenter : Presenter<HomeActivityPresenter.View>() {
 
         fun displayPost(listOfPosts: List<Post>?)
 
-        fun displayError(e:String)
+        fun displayError(e:String?)
+
+        fun displayLoading(show:Boolean)
 
     }
 }

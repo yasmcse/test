@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.View.*
+import android.widget.ProgressBar
 import butterknife.ButterKnife
 import com.example.testuser.myapplication.R
 import com.example.testuser.myapplication.model.Post
@@ -34,12 +36,18 @@ class MainActivity : AppCompatActivity(), HomeActivityPresenter.View {
     }
 
     override fun displayPost(listOfPosts: List<Post>?) {
-        homeRecyclerView.visibility = View.VISIBLE
+        homeRecyclerView.visibility = VISIBLE
         homeAdapter?.listItems = listOfPosts
     }
 
-    override fun displayError(error: String) {
-        error_msg.visibility = View.VISIBLE
+    override fun displayError(error: String?) {
+        error_msg.visibility = VISIBLE
         error_msg.text = error
+    }
+
+    override fun displayLoading(show: Boolean) = if (show) {
+        progressBar.visibility = VISIBLE
+    } else {
+        progressBar.visibility = GONE
     }
 }
