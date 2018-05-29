@@ -1,5 +1,6 @@
 package com.example.testuser.myapplication.features.home
 
+
 import com.example.testuser.myapplication.base.Presenter
 import com.example.testuser.myapplication.model.Post
 import com.example.testuser.myapplication.service.MyService
@@ -9,15 +10,18 @@ import rx.schedulers.Schedulers
 
 
 class HomeActivityPresenter : Presenter<HomeActivityPresenter.View>() {
+
+    var myService = MyService.Creator.newMyService()
+    var backgroundThreadScheduler = Schedulers.newThread()
+    var mainThreadScheduler = AndroidSchedulers.mainThread()
+
+
     override fun onViewAttached(view: View) {
         super.onViewAttached(view)
 
-
-        val myService = MyService.Creator.newMyService()
-
         val postsObservable = myService.posts
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(backgroundThreadScheduler)
+                .observeOn(mainThreadScheduler)
 
         postsObservable.subscribe(object : Observer<List<Post>> {
             override fun onNext(postList: List<Post>?) {
@@ -30,7 +34,7 @@ class HomeActivityPresenter : Presenter<HomeActivityPresenter.View>() {
             }
 
             override fun onError(e: Throwable) {
-                 view.displayError(e.message)
+                view.displayError(e.message)
             }
 
         })
